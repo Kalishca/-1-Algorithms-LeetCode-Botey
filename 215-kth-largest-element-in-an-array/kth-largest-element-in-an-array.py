@@ -31,4 +31,3 @@ class Solution(object):
             max_heapify(A, 1, heap_size)
 
         return A[1]
-        
