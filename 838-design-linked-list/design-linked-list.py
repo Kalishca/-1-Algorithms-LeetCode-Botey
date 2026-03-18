@@ -1,0 +1,80 @@
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class MyLinkedList:
+    def __init__(self):
+        # Инициализация пустого списка: голова, хвост и размер
+        self.head = None
+        self.tail = None
+        self.size = 0
+
+    def get(self, index: int) -> int:
+        """Возвращает значение узла по индексу (0-индексация) или -1 если индекс недопустим."""
+        if index < 0 or index >= self.size:
+            return -1
+        curr = self.head
+        for _ in range(index):
+            curr = curr.next
+        return curr.val
+
+    def addAtHead(self, val: int) -> None:
+        """Добавляет узел в начало списка."""
+        new_node = ListNode(val, self.head)
+        self.head = new_node
+        if self.size == 0:
+            self.tail = new_node
+        self.size += 1
+
+    def addAtTail(self, val: int) -> None:
+        """Добавляет узел в конец списка."""
+        new_node = ListNode(val)
+        if self.size == 0:
+            self.head = new_node
+            self.tail = new_node
+        else:
+            self.tail.next = new_node
+            self.tail = new_node
+        self.size += 1
+
+    def addAtIndex(self, index: int, val: int) -> None:
+        """
+        Добавляет узел перед узлом с указанным индексом.
+        Если index равен длине, добавляет в конец.
+        Если index > длины, ничего не делает.
+        """
+        if index < 0 or index > self.size:
+            return
+        if index == 0:
+            self.addAtHead(val)
+        elif index == self.size:
+            self.addAtTail(val)
+        else:
+            # Вставка в середину: находим узел перед позицией index
+            prev = self.head
+            for _ in range(index - 1):
+                prev = prev.next
+            new_node = ListNode(val, prev.next)
+            prev.next = new_node
+            self.size += 1
+
+    def deleteAtIndex(self, index: int) -> None:
+        """Удаляет узел по указанному индексу, если индекс допустим."""
+        if index < 0 or index >= self.size:
+            return
+        if index == 0:
+            # Удаление головы
+            self.head = self.head.next
+            if self.size == 1:
+                self.tail = None
+        else:
+            # Удаление не головы: находим предыдущий узел
+            prev = self.head
+            for _ in range(index - 1):
+                prev = prev.next
+            prev.next = prev.next.next
+            if index == self.size - 1:
+                # Если удаляем последний, обновляем хвост
+                self.tail = prev
+        self.size -= 1
