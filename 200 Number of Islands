@@ -1,0 +1,45 @@
+from typing import List
+
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        """
+        Подсчитывает количество островов в двумерной сетке.
+        Остров — это группа смежных (по горизонтали/вертикали) клеток '1',
+        окружённая водой ('0').
+        Используется поиск в ширину (BFS) с ручной очередью.
+        """
+        if not grid or not grid[0]:
+            return 0
+
+        rows, cols = len(grid), len(grid[0])
+        islands = 0
+
+        # Ручная очередь для BFS (максимальный размер — все клетки)
+        queue = [None] * (rows * cols)
+
+        for r in range(rows):
+            for c in range(cols):
+                # Если нашли землю ('1') — начинаем новый остров
+                if grid[r][c] == '1':
+                    islands += 1
+
+                    # BFS: затопляем весь остров, превращая '1' в '0'
+                    head = 0
+                    tail = 0
+                    queue[tail] = (r, c)
+                    tail += 1
+                    grid[r][c] = '0'  # помечаем как посещённое (становится водой)
+
+                    while head < tail:
+                        cur_r, cur_c = queue[head]
+                        head += 1
+
+                        # Проверяем четырёх соседей (список смежности)
+                        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                            nr, nc = cur_r + dr, cur_c + dc
+                            if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == '1':
+                                queue[tail] = (nr, nc)
+                                tail += 1
+                                grid[nr][nc] = '0'  # немедленно помечаем, чтобы не добавлять повторно
+
+        return islands
