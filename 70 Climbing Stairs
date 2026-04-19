@@ -1,0 +1,19 @@
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        # Базовые случаи
+        if n == 1:
+            return 1
+        if n == 2:
+            return 2
+        
+        # Две переменные для хранения предыдущих двух значений
+        first = 1  # F(1)
+        second = 2 # F(2)
+        
+        # Вычисляем F(3) ... F(n)
+        for i in range(3, n + 1):
+            third = first + second
+            first = second
+            second = third
+        
+        return second
