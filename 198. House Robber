@@ -1,0 +1,18 @@
+class Solution:
+    def rob(self, nums: list[int]) -> int:
+        if not nums:
+            return 0
+        if len(nums) == 1:
+            return nums[0]
+        
+        # Оптимизация: храним максимум для двух предыдущих шагов
+        prev2 = 0 # Максимум на шаге i-2
+        prev1 = 0 # Максимум на шаге i-1
+        
+        for num in nums:
+            # Текущий максимум: либо грабим этот дом + prev2, либо пропускаем
+            current = max(prev1, prev2 + num)
+            prev2 = prev1
+            prev1 = current
+            
+        return prev1
